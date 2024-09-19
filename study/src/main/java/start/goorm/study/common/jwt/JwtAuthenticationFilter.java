@@ -45,16 +45,17 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     }
 
     private User getUser(String token) {
+        Long userId = jwtProvider.getUserId(token);
         String username = jwtProvider.getUsername(token);
         String name = jwtProvider.getName(token);
         String role = jwtProvider.getRole(token);
 
-        User user = User.builder()
+        return User.builder()
+                .id(userId)
                 .username(username)
                 .name(name)
                 .role(role)
                 .build();
-        return user;
     }
 
     private boolean verifyToken(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain, String token) throws IOException, ServletException {

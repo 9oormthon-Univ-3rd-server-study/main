@@ -32,14 +32,18 @@ public class JwtProvider {
         return Jwts.parser().verifyWith(secretKey).build().parseSignedClaims(token).getPayload().get("name", String.class);
     }
 
+    public Long getUserId(String token) {
+        return Jwts.parser().verifyWith(secretKey).build().parseSignedClaims(token).getPayload().get("userId", Long.class);
+    }
+
     public Boolean isExpired(String token) {
-        System.out.println("token " + token);
         return Jwts.parser().verifyWith(secretKey).build().parseSignedClaims(token).getPayload().getExpiration().before(new Date());
     }
 
-    public String create(String username, String role, String name, Long expiredMs) {
+    public String create(String username, String role, String name, Long userId, Long expiredMs) {
 
         return Jwts.builder()
+                .claim("userId", userId)
                 .claim("username", username)
                 .claim("name", name)
                 .claim("role", role)

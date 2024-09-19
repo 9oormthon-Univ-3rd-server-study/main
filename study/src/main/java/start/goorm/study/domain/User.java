@@ -24,7 +24,7 @@ public class User {
     private String role;
 
     @Builder
-    private User(String username, String name, String email, String role) {
+    private User(Long id, String username, String name, String email, String role) {
         this.username = username;
         this.name = name;
         this.email = email;

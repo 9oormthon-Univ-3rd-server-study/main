@@ -14,7 +14,7 @@ import java.util.Map;
 @Getter
 public class LoginUser implements UserDetails, OAuth2User {
 
-    private User user;
+    private final User user;
     private Map<String, Object> attributes;
 
     public LoginUser(User user) {
@@ -51,5 +51,9 @@ public class LoginUser implements UserDetails, OAuth2User {
     @Override
     public String getName() {
         return user.getName();
+    }
+
+    public Long getUserId() {
+        return user.getId();
     }
 }
