@@ -8,6 +8,7 @@ import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
 import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
+import start.goorm.study.common.config.LoginUser;
 import start.goorm.study.domain.User;
 import start.goorm.study.dto.CustomOAuth2User;
 import start.goorm.study.dto.Oauth2Response;
@@ -28,6 +29,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
     @Override
     public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
 
+        // 사용자 정보를 받아오는 것 까지 알아서 처리해준다.
         OAuth2User oAuth2User = super.loadUser(userRequest);
         log.debug("oAuth2User {}", oAuth2User);
 
@@ -37,28 +39,20 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 
         String username = oauth2Response.getProvider()+" " + oauth2Response.getProviderId();
         Optional<User> userOptional = userRepository.findByUsername(username);
-        UserDto userDto = getUserDto(username, oauth2Response);
+        User user;
         if (userOptional.isEmpty()) {
-            User user = User.builder()
+            user = User.builder()
                     .username(username)
                     .name(oauth2Response.getName())
-//                    .email(oauth2Response.getEmail())
+                    .email(oauth2Response.getEmail())
                     .role("ROLE_USER")
                     .build();
             userRepository.save(user);
         } else {
-            User user = userOptional.get();
+            user = userOptional.get();
             user.update(username, oauth2Response.getName(), oauth2Response.getEmail());
-
         }
-        return new CustomOAuth2User(userDto);
+        return new LoginUser(user, oAuth2User.getAttributes());
     }
 
-    private static UserDto getUserDto(String username, Oauth2Response oauth2Response) {
-        return UserDto.builder()
-                .username(username)
-                .name(oauth2Response.getName())
-                .role("ROLE_USER")
-                .build();
-    }
 }
