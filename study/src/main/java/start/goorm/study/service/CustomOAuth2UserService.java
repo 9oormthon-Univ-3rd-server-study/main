@@ -48,7 +48,6 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
                     .role("ROLE_USER")
                     .build();
             user = userRepository.save(user);
-            System.out.println("customOAuth2UserService userId " + user.getId());
         } else {
             user = userOptional.get();
             user.update(username, oauth2Response.getName(), oauth2Response.getEmail());

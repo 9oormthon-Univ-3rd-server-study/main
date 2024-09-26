@@ -16,9 +16,6 @@ public class HiController {
 
     @GetMapping("/hi")
     public void hi(@AuthenticationPrincipal LoginUser loginUser) {
-        log.info("loginUsername={}", loginUser.getUserId());
-        log.info("loginUsername={}", loginUser.getUser());
-        log.info("loginUsername={}", loginUser.getUsername());
-        log.info("loginUsername={}", loginUser.getName());
+
     }
 }

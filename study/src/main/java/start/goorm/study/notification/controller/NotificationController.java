@@ -20,7 +20,7 @@ public class NotificationController {
     // lastEventId : 처음 구독할 때는 Last-Event-ID 헤더가 포함되지 않습니다.
     // 네트워크 등의 문제(새로고침 x)
     @GetMapping(value = "/api/subscribe", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
-    public SseEmitter subscribe(
+    public SseEmitter subscribe( // ResponseEntity로 반환하면 application/json 으로 처리해서 응답본문으로 취급
             @RequestHeader(value = "Last-Event-ID", required = false, defaultValue = "") String lastEventId,
             @AuthenticationPrincipal LoginUser loginUser) {
         System.out.println("userId " + loginUser.getUserId());

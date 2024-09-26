@@ -31,7 +31,6 @@ public class CustomSuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
         String username = loginUser.getUsername();
         String name = loginUser.getName();
         Long userId = loginUser.getUserId();
-        System.out.println("CustomSuccessHandler.onAuthenticationSuccess " + userId);
 
         Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
         Iterator<? extends GrantedAuthority> iterator = authorities.iterator();

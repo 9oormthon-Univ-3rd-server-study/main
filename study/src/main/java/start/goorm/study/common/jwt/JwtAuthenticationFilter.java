@@ -18,6 +18,7 @@ import start.goorm.study.common.config.LoginUser;
 import start.goorm.study.domain.User;
 import start.goorm.study.dto.CustomOAuth2User;
 import start.goorm.study.dto.UserDto;
+import start.goorm.study.repository.UserRepository;
 
 import java.io.IOException;
 
@@ -26,6 +27,7 @@ import java.io.IOException;
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private final JwtProvider jwtProvider;
+    private final UserRepository userRepository;
     private static final Logger log = LoggerFactory.getLogger(JwtAuthenticationFilter.class);
 
     @Override
@@ -46,16 +48,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private User getUser(String token) {
         Long userId = jwtProvider.getUserId(token);
-        String username = jwtProvider.getUsername(token);
-        String name = jwtProvider.getName(token);
-        String role = jwtProvider.getRole(token);
-
-        return User.builder()
-                .id(userId)
-                .username(username)
-                .name(name)
-                .role(role)
-                .build();
+        return userRepository.findById(userId).orElseThrow(() -> new IllegalArgumentException("잘못된 토큰"));
     }
 
     private boolean verifyToken(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain, String token) throws IOException, ServletException {

@@ -5,6 +5,7 @@ import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.locks.ReentrantLock;
 import java.util.stream.Collectors;
 
 @Repository
@@ -27,7 +28,7 @@ public class SseEmitterRepository implements EmitterRepository{
 
     @Override
     public Map<String, SseEmitter> findAllStartWithUserId(Long userId) {
-        // Set {
+        // Set { 1_11시20분, 1_11시24
         //    Entry { key: "client1", value: SseEmitter@123 }, Map.Entry<String, SseEmitter>
         //    Entry { key: "client2", value: SseEmitter@456 },
         //    Entry { key: "client3", value: SseEmitter@789 }
@@ -68,4 +69,7 @@ public class SseEmitterRepository implements EmitterRepository{
     public Map<String, SseEmitter> findAll() {
         return emitters;
     }
+
+
+    ReentrantLock lock = new ReentrantLock();
 }
